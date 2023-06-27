@@ -5,10 +5,10 @@ body {
   background-color: antiquewhite;
 }
 
-/* .main-cont {
+.main-cont {
   padding: 20px;
   margin-top: 60px;
 }
 ::-webkit-scrollbar {
   display: none;
-} */
+}

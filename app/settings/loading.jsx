@@ -3,5 +3,5 @@
 import { Spin } from "antd";
 
 export default function Loading() {
-  return <Spin style={{ margin: "auto" }} tip="Loading" size="large" />;
+  return <Spin tip="Loading" size="large" />;
 }
