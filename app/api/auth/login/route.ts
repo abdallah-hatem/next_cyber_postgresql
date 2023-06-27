@@ -10,7 +10,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   if (!user) {
     return NextResponse.json(
       { message: "ERROR! user not found" },
-      { status: 404 }
+      { status: 404 } 
     );
   }
 
