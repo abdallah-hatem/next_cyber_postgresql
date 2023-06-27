@@ -10,7 +10,7 @@ export async function DELETE({ params }: any) {
 
   if (!deleteType) {
     return NextResponse.json(
-      { message: "ERROR!" }
+      { message: "ERROR!" } 
       // { status: 404 }
     );
   }
