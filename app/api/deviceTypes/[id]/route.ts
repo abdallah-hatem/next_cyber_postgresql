@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "../../../../db";
 
 export async function DELETE({ params }: any) {
@@ -10,7 +10,7 @@ export async function DELETE({ params }: any) {
 
   if (!deleteType) {
     return NextResponse.json(
-      { message: "ERROR!" } 
+      { message: "ERROR!" }
       // { status: 404 }
     );
   }
