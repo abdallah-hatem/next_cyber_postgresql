@@ -1,8 +1,11 @@
 import { prisma } from "../../../../db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-
-export async function DELETE({ params }: any) {
+export async function DELETE(
+  res: NextResponse,
+  { params }: any,
+  req: NextRequest
+) {
   const id = Number(params.id);
 
   const deleteType = await prisma.devicetype.delete({
@@ -22,8 +25,13 @@ export async function DELETE({ params }: any) {
   );
 }
 
-export async function GET({ params }: any) {
+export async function GET(
+  res: NextResponse,
+  { params }: any,
+  req: NextRequest
+) {
   const userId = Number(params.id);
+
   const types = await prisma.devicetype.findMany({ where: { userId } });
 
   if (!types) {
