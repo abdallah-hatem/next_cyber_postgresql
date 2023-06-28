@@ -20,10 +20,9 @@ export const authConfig: NextAuthOptions = {
 
         const dbUser = await isUserRegistered(credentials.email);
 
-        const validPass = await bcrypt.compare(
-          credentials.password,
-          dbUser.password
-        );
+        const validPass =
+          dbUser &&
+          (await bcrypt.compare(credentials.password, dbUser.password));
 
         if (dbUser && validPass) {
           return dbUser as any;
