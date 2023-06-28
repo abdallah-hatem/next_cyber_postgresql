@@ -10,10 +10,14 @@ export default async function Settings() {
   const devices = await getDevices();
   const userId = await getUserId();
 
+  devices && console.log(devices, "devicessssssssss");
+
   return (
-    <>
-      <Devices data={devices} options={optionsData} userId={userId} />
-      <DeviceTypes data={deviceTypesData} userId={userId} />
-    </>
+    devices && (
+      <>
+        <Devices data={devices} options={optionsData} userId={userId} />
+        <DeviceTypes data={deviceTypesData} userId={userId} />
+      </>
+    )
   );
 }

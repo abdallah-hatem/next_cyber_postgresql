@@ -12,8 +12,7 @@ export default async function DeviceTypes({ data, userId }) {
     console.log(changes, "changes");
 
     ADD_DEVICE_TYPE({ ...changes, userId }).then(() =>
-      // window.location.reload()
-      ""
+      window.location.reload()
     );
   }
 
