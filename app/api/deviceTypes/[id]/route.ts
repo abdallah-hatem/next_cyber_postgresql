@@ -1,37 +1,37 @@
-// import { prisma } from "../../../../db";
-// import { NextResponse } from "next/server";
+import { prisma } from "../../../../db";
+import { NextResponse } from "next/server";
 
 
-// export async function DELETE({ params }: any) {
-//   const id = Number(params.id);
+export async function DELETE({ params }: any) {
+  const id = Number(params.id);
 
-//   const deleteType = await prisma.devicetype.delete({
-//     where: { id },
-//   });
+  const deleteType = await prisma.devicetype.delete({
+    where: { id },
+  });
 
-//   if (!deleteType) {
-//     return NextResponse.json(
-//       { message: "ERROR!" }
-//       // { status: 404 }
-//     );
-//   }
+  if (!deleteType) {
+    return NextResponse.json(
+      { message: "ERROR!" }
+      // { status: 404 }
+    );
+  }
 
-//   return NextResponse.json(
-//     { message: "type deleted successfully" },
-//     { status: 200 }
-//   );
-// }
+  return NextResponse.json(
+    { message: "type deleted successfully" },
+    { status: 200 }
+  );
+}
 
-// export async function GET({ params }: any) {
-//   const userId = Number(params.id);
-//   const types = await prisma.devicetype.findMany({ where: { userId } });
+export async function GET({ params }: any) {
+  const userId = Number(params.id);
+  const types = await prisma.devicetype.findMany({ where: { userId } });
 
-//   if (!types) {
-//     return NextResponse.json(
-//       { message: "ERROR! no types found" },
-//       { status: 404 }
-//     );
-//   }
+  if (!types) {
+    return NextResponse.json(
+      { message: "ERROR! no types found" },
+      { status: 404 }
+    );
+  }
 
-//   return NextResponse.json({ data: types }, { status: 200 });
-// }
+  return NextResponse.json({ data: types }, { status: 200 });
+}
