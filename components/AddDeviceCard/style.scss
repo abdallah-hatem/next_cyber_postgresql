@@ -1,0 +1,23 @@
+.add-card-container {
+  width: 300px;
+  height: 350px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(202, 202, 202, 0.5);
+  cursor: pointer;
+  transition: ease-in-out 0.5s;
+  border: solid gray 1px;
+  margin-top: 40px;
+
+  .plus-icon {
+    font-size: 60px;
+    transition: ease-in-out 0.3s;
+  }
+  &:hover {
+    background-color: rgba(142, 142, 142, 0.5);
+    .plus-icon {
+      transform: scale(1.6);
+    }
+  }
+}

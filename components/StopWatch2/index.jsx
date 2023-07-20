@@ -1,23 +1,49 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ButtonComponent from "../ButtonComponent";
 import CardComponent from "../CardComponent";
+import CardBottomCont from "./components/cardBottomCont";
+import CardTopCont from "./components/cardTopCont";
 
-export default function StopWatch2({ title, id, type, hourRate }) {
+export default function StopWatch2({
+  title,
+  id,
+  type,
+  hourRateSingle,
+  hourRateMulti,
+}) {
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [isRunningMulti, setIsRunningMulti] = useState(false);
+  const [multiTime, setMultiTime] = useState(0);
+
+  const [radioVal, setRadioVal] = useState("single");
+
+  function inClient() {
+    return typeof window !== "undefined";
+  }
 
   useEffect(() => {
     const previousTime = localStorage.getItem("stopwatchTime" + id);
     const previousIsRunning = localStorage.getItem("stopwatchIsRunning" + id);
 
+    const previousTimeMulti = localStorage.getItem("stopwatchTimeMulti" + id);
+    const previousIsRunningMulti = localStorage.getItem(
+      "stopwatchIsRunningMulti" + id
+    );
+
     if (previousTime) {
       setTime(parseInt(previousTime));
+    }
+    if (previousTimeMulti) {
+      setMultiTime(parseInt(previousTimeMulti));
     }
 
     if (previousIsRunning === "true") {
       setIsRunning(true);
+    }
+    if (previousIsRunningMulti === "true") {
+      setIsRunningMulti(true);
     }
   }, []);
 
@@ -26,7 +52,11 @@ export default function StopWatch2({ title, id, type, hourRate }) {
 
     if (isRunning) {
       timer = setInterval(() => {
-        setTime((prevTime) => prevTime + 1);
+        const startTime = localStorage.getItem("startTime" + id);
+        const currentTime = new Date().getTime();
+        const elapsed = currentTime - startTime;
+
+        setTime(Math.trunc(elapsed / 1000));
       }, 1000);
     }
 
@@ -36,105 +66,115 @@ export default function StopWatch2({ title, id, type, hourRate }) {
   }, [isRunning]);
 
   useEffect(() => {
+    let multiTimer;
+
+    if (isRunning && isRunningMulti) {
+      multiTimer = setInterval(() => {
+        const startTime = localStorage.getItem("startTimeMulti" + id);
+        const currentTime = new Date().getTime();
+        const elapsed = currentTime - startTime;
+
+        setMultiTime(Math.trunc(elapsed / 1000));
+
+        console.log(time, "timeeeeeeee");
+        console.log(multiTime, "multiTimeeeeee");
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(multiTimer);
+    };
+  }, [isRunning, isRunningMulti]);
+
+  useEffect(() => {
     localStorage.setItem("stopwatchTime" + id, time.toString());
     localStorage.setItem("stopwatchIsRunning" + id, isRunning.toString());
-  }, [time, isRunning]);
 
-  const startTimer = () => {
-    setIsRunning(true);
+    localStorage.setItem("stopwatchTimeMulti" + id, multiTime.toString());
+    localStorage.setItem(
+      "stopwatchIsRunningMulti" + id,
+      isRunningMulti.toString()
+    );
+  }, [time, isRunning, isRunningMulti, multiTime]);
 
-    if (!localStorage.getItem("startTime" + id)) {
-      let newDate = new Date();
-      localStorage.setItem(
-        "startTime" + id,
-        newDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-      );
+  function getStartTime() {
+    const stTime = inClient() && localStorage.getItem("startTime" + id);
+    const options = { hour: "numeric", minute: "numeric" };
+
+    if (stTime) {
+      const date = new Date(Number(stTime)).toLocaleTimeString([], options);
+      return date;
     }
-  };
+  }
 
-  const pauseTimer = () => {
-    setIsRunning(false);
-  };
+  function charge() {
+    let fullTime = inClient() && localStorage.getItem("stopwatchTime" + id);
+    let multiTime =
+      inClient() && localStorage.getItem("stopwatchTimeMulti" + id);
 
-  const resetTimer = () => {
-    setIsRunning(false);
-    setTime(0);
-    localStorage.removeItem("stopwatchTime" + id);
-    localStorage.removeItem("stopwatchIsRunning" + id);
-    localStorage.removeItem("startTime" + id);
-  };
+    let singleTime = fullTime - multiTime;
 
-  function charge(secs) {
-    const hours = Math.floor(secs / 3600);
-    const minutes = Math.floor(secs / 60);
+    const hours = Math.floor(singleTime / 3600);
+    const minutes = Math.floor(singleTime / 60);
 
-    let hourPrice = hourRate;
+    const hoursMulti = Math.floor(multiTime / 3600);
+    const minutesMulti = Math.floor(multiTime / 60);
+
+    let hourPrice = hourRateSingle;
     let minPrice = hourPrice / 60;
 
-    let charge = (hours * hourPrice + minutes * minPrice).toFixed(2);
+    let hourPriceMulti = hourRateMulti;
+    let minPriceMulti = hourPriceMulti / 60;
 
+    let chargeSingle = hours * hourPrice + minutes * minPrice;
+
+    let chargeMulti =
+      hoursMulti * hourPriceMulti + minutesMulti * minPriceMulti;
+
+    let charge = (chargeSingle + chargeMulti ?? 0).toFixed(2);
     return charge;
   }
 
-  function formatTime(secs) {
-    const hours = Math.floor(secs / 3600);
-    const minutes = Math.floor(secs / 60);
-    const seconds = secs % 60;
-
-    return [hours, minutes, seconds];
-  }
-
   function timer() {
-    let timeFormat = `${formatTime(time)[0]}:${formatTime(time)[1]}:${
-      formatTime(time)[2]
-    }`;
+    const result = new Date(time * 1000).toISOString().slice(11, 19);
 
-    return timeFormat;
+    return result;
   }
-
-  function getStartTime() {
-    return localStorage.getItem("startTime" + id);
-  }
-
-  const buttons = [
-    { title: "Start", onClick: startTimer },
-    { title: "Stop", onClick: pauseTimer },
-    { title: "Reset", onClick: resetTimer },
-  ];
-
   return (
     <CardComponent
+      title=""
       style={{ width: "300px", margin: 10 }}
       styleContent={cardContent}
-      title=""
     >
       <div className="device-cont">
         <div className="title-cont">
           <span>{title}</span>
           <span>{type}</span>
         </div>
-        <div className="top-cont">
-          <span className="timer">{timer()}</span>
 
-          <div className="info-cont">
-            <p>Start : {getStartTime()}</p>
-            <p>charge: ${charge(time)}</p>
-          </div>
-        </div>
+        <CardTopCont
+          timer={timer}
+          setIsRunningMulti={setIsRunningMulti}
+          charge={charge}
+          radioVal={radioVal}
+          setRadioVal={setRadioVal}
+          getStartTime={getStartTime}
+        />
 
-        <div className="bot-cont">
-          <div className="bot-1">
-            {buttons.map((el, index) => (
-              <ButtonComponent
-                style={{ width: 60 }}
-                title={el.title}
-                onClick={el.onClick}
-                key={index}
-              />
-            ))}
-          </div>
-          <ButtonComponent style={{ marginTop: 10 }} title="Done" />
-        </div>
+        <CardBottomCont
+          time={time}
+          timer={timer}
+          id={id}
+          setTime={setTime}
+          setMultiTime={setMultiTime}
+          isRunning={isRunning}
+          setIsRunning={setIsRunning}
+          isRunningMulti={isRunningMulti}
+          setIsRunningMulti={setIsRunningMulti}
+          setRadioVal={setRadioVal}
+          getStartTime={getStartTime}
+          charge={charge}
+        />
       </div>
     </CardComponent>
   );

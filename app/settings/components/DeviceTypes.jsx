@@ -3,17 +3,23 @@ import CardComponent from "../../../components/CardComponent";
 import MasterTable from "../../../components/MasterTable";
 import ADD_DEVICE_TYPE from "../../../lib/addDeviceType";
 import DELETE_DEVICE_TYPE from "../../../lib/deleteDeviceType";
+import UPDATE_DEVICE_TYPE from "../../../lib/updateDeviceType";
 
 export default async function DeviceTypes({ data, userId }) {
   function handleAdd(e) {
     let changes = e.data;
     delete changes.__KEY__;
 
-    console.log(changes, "changes");
-
     ADD_DEVICE_TYPE({ ...changes, userId }).then(() =>
       window.location.reload()
     );
+  }
+
+  function handleEdit(e) {
+    const changes = e.changes[0].data;
+    const id = e.changes[0].key.id;
+
+    UPDATE_DEVICE_TYPE(id, changes).then(() => window.location.reload());
   }
 
   function handleDelete(e) {
@@ -32,8 +38,14 @@ export default async function DeviceTypes({ data, userId }) {
       caption: "Name",
     },
     {
-      field: "hourRate",
-      caption: "Hour Price",
+      field: "hourRateSingle",
+      caption: "Hour Price (Single)",
+      dataType: "number",
+      format: "currency",
+    },
+    {
+      field: "hourRateMulti",
+      caption: "Hour Price (Multi)",
       dataType: "number",
       format: "currency",
     },
@@ -49,12 +61,14 @@ export default async function DeviceTypes({ data, userId }) {
         allowDelete
         allowUpdate
         editingMode="popup"
+        popupTitle="Add a device type"
         searchPanel={false}
         columnChooser={false}
         dataSource={data}
         colAttributes={columns}
         onRowInserting={(e) => handleAdd(e)}
         onRowRemoving={(e) => handleDelete(e)}
+        onSaving={(e) => handleEdit(e)}
       />
     </CardComponent>
   );

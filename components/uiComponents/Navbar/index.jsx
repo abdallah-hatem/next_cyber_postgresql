@@ -2,9 +2,13 @@ import "./style.scss";
 import LinkComponent from "../../../components/LinkComponent";
 import SignOutButton from "./components/signOutButton";
 import { isLoggedIn } from "../../../lib/isUserLoggedIn";
+import { headers } from "next/headers";
 
 export default async function Navbar() {
   const logged = await isLoggedIn();
+
+  const headersList = headers();
+  const currentPath = headersList.get("x-invoke-path");
 
   return (
     <div className="navbar-cont">
@@ -15,12 +19,11 @@ export default async function Navbar() {
 
         {logged !== null && (
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <LinkComponent url="/settings">
-              <p style={{ marginRight: 20 }}>Settings</p>
-            </LinkComponent>
-            {/* <LinkComponent url="/receipts">
-              <p style={{ marginRight: 20 }}>Receipts</p>
-            </LinkComponent> */}
+            {currentPath !== "/settings" && (
+              <LinkComponent url="/settings">
+                <p style={{ marginRight: 20 }}>Settings</p>
+              </LinkComponent>
+            )}
 
             <SignOutButton />
           </div>

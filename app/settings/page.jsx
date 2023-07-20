@@ -13,7 +13,8 @@ export default async function Settings() {
   devices && console.log(devices, "devicessssssssss");
 
   return (
-    devices && (
+    devices &&
+    deviceTypesData && (
       <>
         <Devices data={devices} options={optionsData} userId={userId} />
         <DeviceTypes data={deviceTypesData} userId={userId} />

@@ -15,7 +15,12 @@ export async function getDeviceTypes(options) {
   }
 
   let newData = data?.data?.map((el) => {
-    return { id: el.id, name: el.name, hourRate: el.hourRate };
+    return {
+      id: el.id,
+      name: el.name,
+      hourRateSingle: el.hourRateSingle,
+      hourRateMulti: el.hourRateMulti,
+    };
   });
 
   return newData;

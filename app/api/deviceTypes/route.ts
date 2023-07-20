@@ -17,10 +17,10 @@ export async function GET() {
 
 // Create a device type
 export async function POST(req: NextRequest, res: NextResponse) {
-  const { name, hourRate, userId } = await req.json();
+  const { name, hourRateSingle, hourRateMulti, userId } = await req.json();
 
   const newType = await prisma.devicetype.create({
-    data: { name, hourRate, userId },
+    data: { name, hourRateSingle, hourRateMulti, userId },
   });
 
   if (!newType) {

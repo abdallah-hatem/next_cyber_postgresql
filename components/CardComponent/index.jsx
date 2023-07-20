@@ -21,7 +21,6 @@ export default function CardComponent({
       headStyle={headStyle}
       hidden={hidden}
       loading={loading}
-      // style={{ margin: 15, ...style }}
       style={style}
     >
       <div style={styleContent}>{children}</div>

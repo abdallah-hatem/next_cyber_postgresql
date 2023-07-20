@@ -19,6 +19,7 @@ export default function ModalComponent({
       okText={okText}
       onCancel={onCancel}
       cancelText={cancelText}
+      centered={false}
     >
       {children}
     </Modal>
