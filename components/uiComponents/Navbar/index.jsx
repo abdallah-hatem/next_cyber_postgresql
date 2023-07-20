@@ -19,11 +19,15 @@ export default async function Navbar() {
 
         {logged !== null && (
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            {currentPath !== "/settings" && (
+            {/* {currentPath !== "/settings" && (
               <LinkComponent url="/settings">
                 <p style={{ marginRight: 20 }}>Settings</p>
               </LinkComponent>
-            )}
+            )} */}
+
+            <LinkComponent url="/settings">
+              <p style={{ marginRight: 20 }}>Settings</p>
+            </LinkComponent>
 
             <SignOutButton />
           </div>
