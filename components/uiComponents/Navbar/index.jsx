@@ -13,14 +13,14 @@ export default async function Navbar() {
   return (
     <div className="navbar-cont">
       <div className="items-cont">
-        <LinkComponent url="/">
+        <LinkComponent useAnc={true} url="/">
           <h2>PlayStation.</h2>
         </LinkComponent>
 
         {logged !== null && (
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             {currentPath !== "/settings" && (
-              <LinkComponent url="/settings">
+              <LinkComponent useAnc={true} url="/settings">
                 <p style={{ marginRight: 20 }}>Settings</p>
               </LinkComponent>
             )}

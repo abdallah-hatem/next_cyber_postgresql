@@ -10,8 +10,6 @@ export default async function Settings() {
   const devices = await getDevices();
   const userId = await getUserId();
 
-  devices && console.log(devices, "devicessssssssss");
-
   return (
     devices &&
     deviceTypesData && (

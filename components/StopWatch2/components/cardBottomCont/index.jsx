@@ -21,6 +21,7 @@ export default function CardBottomCont({
   charge,
 }) {
   const [openReceipt, setOpenReceipt] = useState(false);
+  const [prevTime, setPrevTime] = useState(0);
 
   function startTimer() {
     setIsRunning(true);
@@ -33,6 +34,23 @@ export default function CardBottomCont({
     if (!localStorage.getItem("startTime" + id)) {
       const newDate = new Date();
       localStorage.setItem("startTime" + id, newDate.getTime());
+    }
+
+    // ///////
+
+    if (localStorage.getItem("pausedAt" + id)) {
+      const now = new Date().getTime();
+      const pausedAt = localStorage.getItem("pausedAt" + id);
+      const pausedTime = now - pausedAt;
+      const prevPausedTime = localStorage.getItem("prevPausedTime" + id) ?? 0;
+
+      const startTime = localStorage.getItem("startTime" + id);
+
+      localStorage.setItem("pausedTime" + id, pausedTime + Number(prevPausedTime));
+
+      localStorage.setItem("prevPausedTime" + id, Number(prevPausedTime)+pausedTime);
+
+      localStorage.removeItem("pausedAt" + id);
     }
   }
 
@@ -56,11 +74,14 @@ export default function CardBottomCont({
     localStorage.removeItem("stopwatchIsRunningMulti" + id);
     localStorage.removeItem("startTime" + id);
     localStorage.removeItem("pausedAt" + id);
+    localStorage.removeItem("pausedTime" + id);
+    localStorage.removeItem("prevPausedTime" + id);
   }
 
   const buttons = [
     {
       title: time && !isRunning ? "Resume" : "Start",
+      disabled: isRunning,
       onClick: startTimer,
     },
     { title: "Pause", onClick: pauseTimer, disabled: !isRunning },

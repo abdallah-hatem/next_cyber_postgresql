@@ -54,7 +54,9 @@ export default function StopWatch2({
       timer = setInterval(() => {
         const startTime = localStorage.getItem("startTime" + id);
         const currentTime = new Date().getTime();
-        const elapsed = currentTime - startTime;
+
+        const pausedTime = localStorage.getItem("pausedTime" + id) ?? 0;
+        const elapsed = currentTime - startTime - pausedTime;
 
         setTime(Math.trunc(elapsed / 1000));
       }, 1000);
@@ -154,6 +156,7 @@ export default function StopWatch2({
 
         <CardTopCont
           timer={timer}
+          id={id}
           setIsRunningMulti={setIsRunningMulti}
           charge={charge}
           radioVal={radioVal}

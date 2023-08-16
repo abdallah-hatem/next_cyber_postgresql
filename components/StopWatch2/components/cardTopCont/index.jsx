@@ -8,6 +8,7 @@ export default function CardTopCont({
   radioVal,
   setRadioVal,
   getStartTime,
+  id,
 }) {
   function handleRadioButtons(e) {
     const value = e.target.value;
@@ -24,8 +25,9 @@ export default function CardTopCont({
   return (
     <div className="top-cont">
       <Radio.Group
+        id={id}
         onChange={(e) => handleRadioButtons(e)}
-        defaultValue="single"
+        // defaultValue="single"
         buttonStyle="solid"
         value={radioVal}
       >

@@ -1,5 +1,3 @@
-// "use client";
-
 import StopWatch from "../components/StopWatch";
 import "./style.scss";
 import StopWatch2 from "../components/StopWatch2";
